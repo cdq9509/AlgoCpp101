@@ -9,27 +9,57 @@
  */
 class Solution {
 public:
-    typedef enum {
+#if 0 // recursive version is trivial
+    vector<int> inorderTraversal(TreeNode* root) {
+      vector<int> res;
+      
+      if ( root == NULL ) return res;
+      if ( root->left != NULL ) {
+        vector<int> tmp = inorderTraversal( root->left );
+        res.insert( res.end, tmp.begin(), tmp.end() );
+      }
+      res.push_back( root->val ); 
+      if ( root->right != NULL ) {
+        vector<int> tmp = inorderTraversal( root->right );
+        res.insert( res.end, tmp.begin(), tmp.end() );
+      }      
+        
+    }
+#endif 
+    enum {
       ROOT,
       LEAF
     } nodeType;
     vector<int> inorderTraversal(TreeNode* root) {
-      vector<int> res;      
+      vector<int> res;
+      
       if (root == NULL) return res; 
       
-      stack< pair<TreeNode*, nodeType> > s;
+      stack<TreeNode*> s;
       
-      s.push( make_pair( root, LEAF ) );
-      pair<TreeNode*, nodeType> e;      
+      s.push( root->right );
+      s.push( root );
+      s.push( root->left );
+      
+      TreeNode * elem;
       while ( !s.empty() ) {
-        e = s.top();
+        elem = s.top();
         s.pop();
-        if (e.second == ROOT) { res.push_back( e.first->val ); continue; }
-        TreeNode * t = e.first;
-        if (t->right != NULL) s.push( make_pair( t->right, LEAF ) );
-        s.push( make_pair( t, ROOT ) );
-        if (t->left != NULL) s.push( make_pair( t->left, LEAF ) );
+        
+        
+        
       }
-     return res;    
+      
+      if ( root == NULL ) return res;
+      if ( root->left != NULL ) {
+        vector<int> tmp = inorderTraversal( root->left );
+        res.insert( res.end, tmp.begin(), tmp.end() );
+      }
+      res.push_back( root->val ); 
+      if ( root->right != NULL ) {
+        vector<int> tmp = inorderTraversal( root->right );
+        res.insert( res.end, tmp.begin(), tmp.end() );
+      }              
     }
+    
 };
