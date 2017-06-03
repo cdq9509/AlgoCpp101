@@ -56,6 +56,18 @@ using namespace std;
 // To improve:
 // 1. ( with start is enough to calcuate the distance
 // 2. How to avoid second pass? 
+// 
+// If stack
+// 1. bottom store the last non match symbol's location
+// 2. from bottom to top: store the not-yet matched '(' location
+// Then it works:
+//  1. initially, push -1 as the first non-match location
+//  if incoming symbol is )
+//     pop_stack
+//     if stack is empty: no match, we push ) and its location in. This is new start
+//     else stack top's location - current location is new length. update maxLen. 
+//  else (incoming symbol is (
+//     push ('s location in. 
 class Solution {
 public:
 #if 0
@@ -106,7 +118,26 @@ public:
       return maxLen;
     }
 };
+#endif
 
+class Solution {
+  public:
+  int longestValidParentheses(string s) {
+    stack<int> st;
+    st.push(-1);
+    
+    int maxLen = 0; 
+    for (int i = 0; i < s.size(); ++i){
+      if (s.at(i) == '(') {st.push(i);}
+      else {
+        st.pop();
+        if (st.empty()) {st.push(i);}
+        else {int len = i - st.top(); maxLen = max(maxLen, len); }
+      }
+    }
+    return maxLen; 
+  }
+};
 
 int main(void)
 {
@@ -126,4 +157,3 @@ int main(void)
   cout << s << " NUM =" << sol.longestValidParentheses(s) << endl;
   return 0;
 }
-#endif 
