@@ -16,6 +16,10 @@ Input: "cbbd"
 Output: "bb"
 
 */
+#include <vector>
+#include <string>
+#include <iostream>
+using namespace std;
 
 class Solution {
 public:
@@ -33,15 +37,15 @@ public:
       }
       
       int maxLen = 0, maxStart = 0;
-      for (int e = 0; e < n; ++e) { // end point
-        for (int s = e; s >= 0; --s) {
-          if (s == e) LPS.at(s).at(e) = true;
-          else if ( e = s + 1 ) LPS.at(s).at(e) = (s.at(e) == s.at(i));
-          else if ( LPS.at(s+1).at(e-1) && s.at(e) == s.at(i) ) LPS.at(s).at(e) = true; 
+      for (int end = 0; end < n; ++end) { // end point
+        for (int start = end; start >= 0; --start) {
+          if (start == end) LPS.at(start).at(end) = true;
+          else if ( end = start + 1 ) LPS.at(start).at(end) = (s.at(end) == s.at(start));
+          else if ( LPS.at(start+1).at(end-1) && s.at(end) == s.at(start) ) LPS.at(start).at(end) = true; 
           
-          if (LPS.at(s).at(e)) {
-            int len = e - s + 1; 
-            if (maxLen < len) { maxLen = len; maxStart = s;}
+          if (LPS.at(start).at(end)) {
+            int len = end - start + 1; 
+            if (maxLen < len) { maxLen = len; maxStart = start;}
           }
         }
       }
@@ -49,3 +53,20 @@ public:
         
     }
 };
+
+int main(void)
+{
+  Solution sol; 
+  string s;
+  
+  s = "a";
+  cout << "In:" << s << " LPS:" << sol.longestPalindrome(s) << endl;
+
+  s = "ab";
+  cout << "In:" << s << " LPS:" << sol.longestPalindrome(s) << endl;
+
+  s = "aba";
+  cout << "In:" << s << " LPS:" << sol.longestPalindrome(s) << endl;
+  
+  return 0;
+}
