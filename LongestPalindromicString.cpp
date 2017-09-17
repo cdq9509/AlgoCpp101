@@ -61,18 +61,32 @@ public:
       t += "#"; 
       
       vector<int> LPS; // long gest palindrome size center at location i (from t)
-      LPS.resize(t.size());
+      LPS.resize(t.size(),0);
       
-      int c = 0; // Center of max Palindrome so far
-      int r = 0; // Right boundary of max Palindrome. r-c is radius
+      int maxLen = 0, maxC = 0;
+      int c = 0; // Center of max Palindrome so far (max in the sense of having right most boundary)
+      int r = -1; // Right boundary of max Palindrome. r-c is radius
       for (int i = 0; i < LPS.size(); ++i) {
         if ( i <= r ) {
           // i is inside a know palindrome.
           // so its mirror ip = 
-        }
+          int ip = c - ( i - c );
+            // mirror exists
+            if ( LPS.at(ip) + i <= r ) { LPS.at(i) = LPS.at(ip); }
+            else {LPS.at(i) = r - i ;}
+        } else {
+          LPS.at(i) = 1; 
+        }        
+        // expand to find new palindrome
+        while ( i - LPS.at(i) >= 0 && 
+                LPS.at(i) + i < t.size() &&
+                t.at(LPS.at(i) + i) == t.at( i - LPS.at(i)) ) 
+                {++LPS.at(i);}
+        if (LPS.at(i) > maxLen) { maxLen = LPS.at(i); maxC = i ; }
+        if (LPS.at(i) + i > r ) { r = LPS.at(i) + i; c = i; }
       }
-      
-      
+      cout << t << ";" << maxC << "," << maxLen << endl; 
+      return s.substr( (maxC - maxLen)/2, maxLen/2);
     }
 };
 
